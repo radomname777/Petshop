@@ -3,24 +3,25 @@
     class Petshop
     {
         Animal[] Animals;
-        int count = 0;
+        private int count = 0;
+        private int Price { get; set; }
+        private int Food { get; set; }
         public void Newanimal(Animal animal)
         {
-            if(Animals==null)Animals = new Animal[] {animal};
+            if (Animals == null) Animals = new Animal[] { animal };
             else Animals = Animals.Append(animal).ToArray();
             count++;
         }
         private int Allfood()
         {
-            int food = 0;
-            foreach (var Animal in Animals)food += Animal.MealQuantity;           
-            return food;
+            foreach (var Animal in Animals) Food += Animal.MealQuantity;
+            return Food;
         }
         private int AllPrice()
         {
-            int price = 0;
-            foreach (var Animal in Animals) price += Animal.Price;
-            return price;
+
+            foreach (var Animal in Animals) Price += Animal.Price;
+            return Price;
         }
         public void Remove(string AnimalNmae)
         {
@@ -35,7 +36,6 @@
                     }
                     Array.Resize(ref Animals, Animals.Length - 1);
                     return;
-
                 }
             }
             Console.WriteLine("No Name");
@@ -44,7 +44,7 @@
         {
             int number = 0;
             Console.WriteLine("Enter (LeftArrow && RightArrow && click Enter to select)");
-            while (Animals!=null)
+            while (Animals != null)
             {
                 ConsoleKeyInfo selec = Console.ReadKey();
                 Console.Clear();
@@ -54,16 +54,19 @@
                 else if (selec.Key == ConsoleKey.RightArrow) number--;
                 else if (selec.Key == ConsoleKey.Enter) Start(number);
                 else { Console.WriteLine("Enter (LeftArrow && RightArrow && click Enter to select)"); continue; }
-                Console.ForegroundColor = ConsoleColor.DarkYellow; Console.WriteLine($"{Animals[number].ClassName()}: -> {Animals[number].Name} <-\nAnimal: {number+1}");
+                Console.ForegroundColor = ConsoleColor.DarkYellow; Console.WriteLine($"{Animals[number].ClassName()}: -> {Animals[number].Name} <-\nAnimal: {number + 1}");
                 Thread.Sleep(100);
             }
         }
+        public void FullEnrgy(){foreach (var Animal in Animals)Animal.Energy=100;}
+        
         public void Start(int number)
         {
             int day = 1;
             while (true)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
+                FullEnrgy();
                 Console.WriteLine($"Day {day}"); Thread.Sleep(200);
                 Console.WriteLine($"food consumed: {Allfood()}\nPrice: {AllPrice()}$"); Thread.Sleep(2000);
                 Console.Clear();
@@ -101,21 +104,17 @@
                 Console.WriteLine($"0{i}:00 \t Close(07:00)");
                 Cout(); 
                 Thread.Sleep(1000);
-                Console.Write("Enter: ");
-                ConsoleKeyInfo number = Console.ReadKey();
-                if (Energy < 10)
+                if (Energy <= 10)
                 {
                     Sleeps();
                 }
-                else if (number.Key == ConsoleKey.P)
-                {
-                    Energy -= 20;
-                }
+                Console.Write("Enter: ");
+                ConsoleKeyInfo number = Console.ReadKey();
+                if (number.Key == ConsoleKey.P)Energy -= 20;
                 else if (number.Key == ConsoleKey.Y)
                 {
                     MealQuantity += 10;
                     Energy += (100 - Energy) / 2;
-
                 }
                 else
                 {
